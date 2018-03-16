@@ -20,7 +20,8 @@ app.use(methodOverride());
 const port = process.env.PORT || 3000;
 
 var Todo = mongoose.model('Todo', {
-    text : String
+    text : String,
+    date: String
 });
 
 
@@ -36,9 +37,11 @@ app.get('/api/todos', (req, res) =>{
 });
 
 app.post('/api/todos', (req, res) => {
-
+    var date = new Date(req.body.date);
+    console.log(date);
     Todo.create({
         text : req.body.text,
+        date: date,
         done : false
     }, (err, todo) =>{
         if (err)
@@ -52,6 +55,20 @@ app.post('/api/todos', (req, res) => {
     });
 
 });
+
+// app.finish('/api/todos/:todo_id', (req,res) =>{
+//     Todo.remove({
+//         _id: req.params.todo_id
+//     }, (err, todo) =>{
+//         if(err)
+//             res.send(err);
+//         Todo.find((err,todos)=>{
+//             if(err)
+//                 res.send(err);
+//             res.json(todos);
+//         })
+//     })
+// })
 
 app.delete('/api/todos/:todo_id', (req, res) =>{
     Todo.remove({

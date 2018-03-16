@@ -37,22 +37,27 @@ app.get('/api/todos', (req, res) =>{
 });
 
 app.post('/api/todos', (req, res) => {
-    var date = new Date(req.body.date);
+    if(req.body.date)
+        var date = new Date(req.body.date);
+    else
+        var date = "";
     console.log(date);
-    Todo.create({
-        text : req.body.text,
-        date: date,
-        done : false
-    }, (err, todo) =>{
-        if (err)
-            res.send(err);
-
-        Todo.find((err, todos) => {
+    if(req.body.text){
+        Todo.create({
+            text : req.body.text,
+            date: date,
+            done : false
+        }, (err, todo) =>{
             if (err)
-                res.send(err)
-            res.json(todos);
+                res.send(err);
+
+            Todo.find((err, todos) => {
+                if (err)
+                    res.send(err)
+                res.json(todos);
+            });
         });
-    });
+    }
 
 });
 
